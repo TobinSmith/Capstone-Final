@@ -5,6 +5,16 @@
  */
 package com.mycompany.testpoopy;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author tobin
@@ -62,6 +72,12 @@ public class MainFrame extends javax.swing.JFrame {
         combo_Instructor_SelectDate = new javax.swing.JComboBox<>();
         button_Instructor_Save = new javax.swing.JButton();
         panel_Admin = new javax.swing.JPanel();
+        panel_Test = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        panel_Test_StudentList = new javax.swing.JScrollPane();
+        table_Test_StudentList = new javax.swing.JTable();
+        button_Test_Refresh = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(900, 600));
@@ -391,17 +407,13 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addGap(108, 108, 108)))
                         .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_InstructorLayout.createSequentialGroup()
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addContainerGap())
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_InstructorLayout.createSequentialGroup()
-                                    .addComponent(button_Instructor_MarkIncorrect)
-                                    .addContainerGap()))
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(button_Instructor_MarkIncorrect, javax.swing.GroupLayout.Alignment.TRAILING))
                             .addGroup(panel_InstructorLayout.createSequentialGroup()
                                 .addComponent(combo_Instructor_FilterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(131, 131, 131)
-                                .addComponent(combo_Instructor_FilterStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())))
+                                .addComponent(combo_Instructor_FilterStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
                     .addGroup(panel_InstructorLayout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -450,6 +462,65 @@ public class MainFrame extends javax.swing.JFrame {
 
         tabbedPane.addTab("Admin", panel_Admin);
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel2.setText("This page is used to test features");
+
+        table_Test_StudentList.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "First Name", "Last Name", "Email", "Account Type"
+            }
+        ));
+        panel_Test_StudentList.setViewportView(table_Test_StudentList);
+
+        button_Test_Refresh.setText("Refresh");
+        button_Test_Refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_Test_RefreshActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Display list of students");
+
+        javax.swing.GroupLayout panel_TestLayout = new javax.swing.GroupLayout(panel_Test);
+        panel_Test.setLayout(panel_TestLayout);
+        panel_TestLayout.setHorizontalGroup(
+            panel_TestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_TestLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_TestLayout.createSequentialGroup()
+                .addContainerGap(335, Short.MAX_VALUE)
+                .addGroup(panel_TestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_TestLayout.createSequentialGroup()
+                        .addComponent(button_Test_Refresh)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel3))
+                    .addComponent(panel_Test_StudentList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(90, 90, 90))
+        );
+        panel_TestLayout.setVerticalGroup(
+            panel_TestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_TestLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(panel_TestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(button_Test_Refresh)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_Test_StudentList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52))
+        );
+
+        tabbedPane.addTab("Test", panel_Test);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -469,6 +540,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void button_Test_RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Test_RefreshActionPerformed
+        fillTable(table_Test_StudentList, "SELECT * FROM USER");
+    }//GEN-LAST:event_button_Test_RefreshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -504,12 +579,70 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+    /**
+     * Populates the given table with the results of the provided query
+     * @param table
+     * @param query 
+     */
+    private static void fillTable(JTable table, String query){
+        try{
+            Connection connection = createConnection();
+            if(connection == null){
+                System.out.println("ERROR: Connection Failed");
+            } else {
+                System.out.println("Successfully Connected to DB");
+            }
+            Statement stat = connection.createStatement();
+            ResultSet rs = stat.executeQuery(query);
+
+            //To remove previously added rows
+            while(table.getRowCount() > 0) 
+            {
+                ((DefaultTableModel) table.getModel()).removeRow(0);
+            }
+            int columns = rs.getMetaData().getColumnCount();
+            
+            while(rs.next()){  
+                Object[] row = new Object[columns];
+                for (int i = 1; i <= columns; i++)
+                {  
+                    row[i - 1] = rs.getObject(i);
+                }
+                ((DefaultTableModel) table.getModel()).insertRow(rs.getRow()-1,row);
+            }
+
+        rs.close();
+        stat.close();
+        connection.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    
+    private static Connection createConnection(){
+        try {  
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Connection con;
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://74.117.171.123:3306/CAPSTONE","uacapstone","UAcapstone4");
+            return con;
+        } catch (SQLException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton button_Instructor_MarkIncorrect;
     private javax.swing.JButton button_Instructor_Save;
     private javax.swing.JButton button_Student_Dispute;
     private javax.swing.JButton button_Student_LogOut;
+    private javax.swing.JButton button_Test_Refresh;
     private javax.swing.JButton button_Welcome_Login;
     private javax.swing.JComboBox<String> combo_Instructor_FilterCourse;
     private javax.swing.JComboBox<String> combo_Instructor_FilterStudent;
@@ -517,6 +650,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> combo_Instructor_SelectDate;
     private javax.swing.JComboBox<String> combo_Instructor_SelectStudent;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -534,11 +669,14 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel panel_Admin;
     private javax.swing.JPanel panel_Instructor;
     private javax.swing.JPanel panel_Student;
+    private javax.swing.JPanel panel_Test;
+    private javax.swing.JScrollPane panel_Test_StudentList;
     private javax.swing.JPanel panel_Welcome;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JTable table_Instructor_Absence;
     private javax.swing.JTable table_Student_Absence;
     private javax.swing.JTable table_Student_Attendence;
+    private javax.swing.JTable table_Test_StudentList;
     private javax.swing.JTextField textField_Welcome_Email;
     private javax.swing.JTextField textField_Welcome_Password;
     // End of variables declaration//GEN-END:variables
