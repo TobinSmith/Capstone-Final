@@ -7,6 +7,7 @@ package com.mycompany.testpoopy;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,11 +22,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    // USER_ID of currently logged-in user
+    public int currentUser = -1;
+    
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
+        jLabel4.setVisible(false);
+        tabbedPane.setEnabled(false);
     }
 
     /**
@@ -44,6 +50,7 @@ public class MainFrame extends javax.swing.JFrame {
         label_Welcome_Email = new javax.swing.JLabel();
         label_Welcome_Password = new javax.swing.JLabel();
         button_Welcome_Login = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         panel_Student = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_Student_Attendence = new javax.swing.JTable();
@@ -90,6 +97,15 @@ public class MainFrame extends javax.swing.JFrame {
         label_Welcome_Password.setText("Password");
 
         button_Welcome_Login.setText("Log In");
+        button_Welcome_Login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_Welcome_LoginActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel4.setText("Invalid Login");
 
         javax.swing.GroupLayout panel_WelcomeLayout = new javax.swing.GroupLayout(panel_Welcome);
         panel_Welcome.setLayout(panel_WelcomeLayout);
@@ -106,6 +122,10 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(textField_Welcome_Email)
                     .addComponent(textField_Welcome_Password, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(357, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_WelcomeLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(393, 393, 393))
         );
         panel_WelcomeLayout.setVerticalGroup(
             panel_WelcomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +140,9 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(label_Welcome_Password))
                 .addGap(18, 18, 18)
                 .addComponent(button_Welcome_Login)
-                .addContainerGap(242, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addContainerGap(218, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Welcome", panel_Welcome);
@@ -221,6 +243,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         button_Student_LogOut.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         button_Student_LogOut.setText("Log Out");
+        button_Student_LogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_Student_LogOutActionPerformed(evt);
+            }
+        });
 
         label_Student_Time.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
         label_Student_Time.setText("12:12 PM");
@@ -545,6 +572,77 @@ public class MainFrame extends javax.swing.JFrame {
         fillTable(table_Test_StudentList, "SELECT * FROM USER");
     }//GEN-LAST:event_button_Test_RefreshActionPerformed
 
+    private void button_Welcome_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Welcome_LoginActionPerformed
+        String email = textField_Welcome_Email.getText();
+        String pass = textField_Welcome_Password.getText();
+        
+        //Validate user input
+        if(email.equals("") || pass.equals("")){
+            System.out.println("Please enter login info");
+            return;
+        }
+        
+        String query = "SELECT * FROM USER WHERE USER_EMAIL = ? AND USER_PASSWORD = ?";
+        
+        try{
+            Connection connection = createConnection();
+            if(connection == null){
+                System.out.println("ERROR: Connection Failed");
+            } else {
+                System.out.println("Successfully Connected to DB");
+            }
+            PreparedStatement stat = connection.prepareStatement(query);
+            stat.setString(1, email);
+            stat.setString(2, pass);
+            ResultSet rs = stat.executeQuery();
+
+            // Validate login info
+            if (rs.next()){
+                System.out.println("Successfully logged in");
+                jLabel4.setVisible(false);
+                currentUser = rs.getInt(1);
+                
+                // Clear login fields
+                textField_Welcome_Email.setText("");
+                textField_Welcome_Password.setText("");
+                
+                // Switch to correct tab
+                String userRole = rs.getString(5);
+                if(userRole.equals("STUDENT")){
+                    String name = rs.getString(2) + " " +  rs.getString(3);
+                    label_Student_StudentName.setText(name);
+                    tabbedPane.setSelectedIndex(1);
+                } else if (userRole.equals("INSTRUCTOR")){
+                    
+                } else if (userRole.equals("ADMIN")){
+                    
+                }
+                
+                
+            } else {
+                System.out.println("Invalid Login Info");
+                jLabel4.setVisible(true);
+            }
+
+        rs.close();
+        stat.close();
+        connection.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_button_Welcome_LoginActionPerformed
+
+    private void button_Student_LogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Student_LogOutActionPerformed
+        // Update currentUser global variable
+        currentUser = -1;
+        
+        // Switch to welcome page
+        tabbedPane.setSelectedIndex(0);
+        
+        System.out.println("Successfully logged out");
+    }//GEN-LAST:event_button_Student_LogOutActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -652,6 +750,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
