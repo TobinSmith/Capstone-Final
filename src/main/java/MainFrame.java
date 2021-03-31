@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.testpoopy;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,6 +22,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    // ID of the room where this local machine is running
+    public static final int ROOM_ID = 0;
+    
     // USER_ID of currently logged-in user
     public int currentUser = -1;
     
@@ -60,11 +63,10 @@ public class MainFrame extends javax.swing.JFrame {
         table_Student_Absence = new javax.swing.JTable();
         button_Student_Dispute = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        label_Student_Status = new javax.swing.JLabel();
         label_Student_StudentName = new javax.swing.JLabel();
         label_Student_ClassName = new javax.swing.JLabel();
         button_Student_LogOut = new javax.swing.JButton();
-        label_Student_Time = new javax.swing.JLabel();
         label_Student_Date = new javax.swing.JLabel();
         panel_Instructor = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -87,7 +89,6 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(900, 600));
         setResizable(false);
 
         label_Welcome_Email.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
@@ -146,6 +147,12 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         tabbedPane.addTab("Welcome", panel_Welcome);
+
+        panel_Student.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                panel_StudentFocusGained(evt);
+            }
+        });
 
         table_Student_Attendence.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -232,8 +239,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        jLabel1.setText("Your attendence has been recorded.");
+        label_Student_Status.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        label_Student_Status.setText("Your attendence has been recorded.");
 
         label_Student_StudentName.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
         label_Student_StudentName.setText("Student Name");
@@ -249,9 +256,6 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        label_Student_Time.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
-        label_Student_Time.setText("12:12 PM");
-
         label_Student_Date.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
         label_Student_Date.setText("12/31/2021");
 
@@ -264,7 +268,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
+                            .addComponent(label_Student_Status)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(83, 83, 83)
                                 .addComponent(button_Student_LogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -274,26 +278,21 @@ public class MainFrame extends javax.swing.JFrame {
                             .addComponent(label_Student_StudentName)
                             .addComponent(label_Student_ClassName))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(label_Student_Time, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(label_Student_Date, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addComponent(label_Student_Date)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(label_Student_Status)
                 .addGap(54, 54, 54)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(label_Student_StudentName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(label_Student_ClassName))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(label_Student_Date)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(label_Student_Time)))
+                    .addComponent(label_Student_Date))
                 .addGap(18, 18, 18)
                 .addComponent(button_Student_LogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(20, Short.MAX_VALUE))
@@ -576,9 +575,10 @@ public class MainFrame extends javax.swing.JFrame {
         String email = textField_Welcome_Email.getText();
         String pass = textField_Welcome_Password.getText();
         
-        //Validate user input
+        //Check for empty input
         if(email.equals("") || pass.equals("")){
-            System.out.println("Please enter login info");
+            System.out.println("Invalid Login Info");
+            jLabel4.setVisible(true);
             return;
         }
         
@@ -611,11 +611,12 @@ public class MainFrame extends javax.swing.JFrame {
                 if(userRole.equals("STUDENT")){
                     String name = rs.getString(2) + " " +  rs.getString(3);
                     label_Student_StudentName.setText(name);
+                    label_Student_Status.setText("Processing Attendence...");
                     tabbedPane.setSelectedIndex(1);
                 } else if (userRole.equals("INSTRUCTOR")){
-                    
+                    tabbedPane.setSelectedIndex(2);
                 } else if (userRole.equals("ADMIN")){
-                    
+                    tabbedPane.setSelectedIndex(3);
                 }
                 
                 
@@ -642,6 +643,15 @@ public class MainFrame extends javax.swing.JFrame {
         
         System.out.println("Successfully logged out");
     }//GEN-LAST:event_button_Student_LogOutActionPerformed
+
+    private void panel_StudentFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_panel_StudentFocusGained
+        String date = "" + java.time.LocalDate.now();
+        label_Student_Date.setText(date);
+        
+        // Fetch student's class list
+        // Fetch details of each class in list
+        // Check for matching day and time
+    }//GEN-LAST:event_panel_StudentFocusGained
 
     /**
      * @param args the command line arguments
@@ -747,7 +757,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> combo_Instructor_SelectCourse;
     private javax.swing.JComboBox<String> combo_Instructor_SelectDate;
     private javax.swing.JComboBox<String> combo_Instructor_SelectStudent;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -761,8 +770,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel label_Student_ClassName;
     private javax.swing.JLabel label_Student_Date;
+    private javax.swing.JLabel label_Student_Status;
     private javax.swing.JLabel label_Student_StudentName;
-    private javax.swing.JLabel label_Student_Time;
     private javax.swing.JLabel label_Welcome_Email;
     private javax.swing.JLabel label_Welcome_Password;
     private javax.swing.JPanel panel_Admin;
