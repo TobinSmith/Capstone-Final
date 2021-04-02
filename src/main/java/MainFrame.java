@@ -11,6 +11,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
@@ -23,7 +32,7 @@ import javax.swing.table.DefaultTableModel;
 public class MainFrame extends javax.swing.JFrame {
 
     // ID of the room where this local machine is running
-    public static final int ROOM_ID = 0;
+    public static final int ROOM_ID = 2;
     
     // USER_ID of currently logged-in user
     public int currentUser = -1;
@@ -148,48 +157,29 @@ public class MainFrame extends javax.swing.JFrame {
 
         tabbedPane.addTab("Welcome", panel_Welcome);
 
-        panel_Student.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                panel_StudentFocusGained(evt);
-            }
-        });
-
         table_Student_Attendence.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Course Name", "Room/Bldg", "Timestamp"
+                "Record ID", "Date", "Student ID", "Class ID"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         jScrollPane1.setViewportView(table_Student_Attendence);
-        if (table_Student_Attendence.getColumnModel().getColumnCount() > 0) {
-            table_Student_Attendence.getColumnModel().getColumn(0).setResizable(false);
-            table_Student_Attendence.getColumnModel().getColumn(1).setResizable(false);
-            table_Student_Attendence.getColumnModel().getColumn(2).setResizable(false);
-        }
 
         jLabel6.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
         jLabel6.setText("Attendence Record");
@@ -199,40 +189,27 @@ public class MainFrame extends javax.swing.JFrame {
 
         table_Student_Absence.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Course Name", "Room/Bldg", "Date"
+                "Record ID", "Date", "Class ID", "Student ID"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         jScrollPane2.setViewportView(table_Student_Absence);
-        if (table_Student_Absence.getColumnModel().getColumnCount() > 0) {
-            table_Student_Absence.getColumnModel().getColumn(0).setResizable(false);
-            table_Student_Absence.getColumnModel().getColumn(1).setResizable(false);
-            table_Student_Absence.getColumnModel().getColumn(2).setResizable(false);
-        }
 
         button_Student_Dispute.setForeground(new java.awt.Color(255, 51, 51));
         button_Student_Dispute.setText("Dispute");
@@ -305,21 +282,22 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(panel_StudentLayout.createSequentialGroup()
                 .addGroup(panel_StudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_StudentLayout.createSequentialGroup()
-                        .addGap(363, 363, 363)
-                        .addGroup(panel_StudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(button_Student_Dispute, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panel_StudentLayout.createSequentialGroup()
+                        .addGap(798, 798, 798)
+                        .addComponent(button_Student_Dispute))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(panel_StudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(24, 24, 24)
-                                .addComponent(jScrollPane1))
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel7)
-                                .addGap(206, 206, 206)))))
+                                .addGroup(panel_StudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addGap(206, 206, 206))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -613,10 +591,11 @@ public class MainFrame extends javax.swing.JFrame {
                     label_Student_StudentName.setText(name);
                     label_Student_Status.setText("Processing Attendence...");
                     tabbedPane.setSelectedIndex(1);
+                    panel_StudentFocusGained();
                 } else if (userRole.equals("INSTRUCTOR")){
                     tabbedPane.setSelectedIndex(2);
                 } else if (userRole.equals("ADMIN")){
-                    tabbedPane.setSelectedIndex(3);
+                    tabbedPane.setSelectedIndex(4);
                 }
                 
                 
@@ -634,6 +613,103 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_button_Welcome_LoginActionPerformed
 
+    private void panel_StudentFocusGained(){
+        String date = "" + java.time.LocalDate.now();
+        label_Student_Date.setText(date);
+        
+        // Populate tables
+        fillTable(table_Student_Attendence, "SELECT * FROM ATTENDENCERECORDS WHERE RECORD_STUDENTID = ?", currentUser);
+        fillTable(table_Student_Absence, "SELECT * FROM ABSENCERECORDS WHERE RECORD_STUDENTID = ?", currentUser);
+        
+        // Insert Attendence Record
+        // Fetch student class list
+        List<Integer> classList = new ArrayList<Integer>();
+        String query = "SELECT ENROLLMENT_CLASSID FROM ENROLLMENT WHERE ENROLLMENT_STUDENTID = ?";
+        try{
+            Connection connection = createConnection();
+            if(connection == null){
+                System.out.println("ERROR: Connection Failed");
+            } else {
+                System.out.println("Successfully Connected to DB");
+            }
+            PreparedStatement stat = connection.prepareStatement(query);
+            stat.setInt(1, currentUser);
+            ResultSet rs = stat.executeQuery();
+            
+            while(rs.next()){  
+                classList.add(rs.getInt(1));
+            }
+
+        rs.close();
+        stat.close();
+        connection.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        
+        // Check for active class in current room
+        String currentDay = getDay();
+        
+        for(int classID : classList){
+            query = "SELECT CLASS_DAYS, CLASS_CODE, CLASS_ROOMID FROM CLASS "
+                    + "WHERE (CLASS_ID = ?) AND (NOW() BETWEEN CLASS_BEGINTIME AND CLASS_ENDTIME)";
+            try{
+                Connection connection = createConnection();
+                if(connection == null){
+                    System.out.println("ERROR: Connection Failed");
+                } else {
+                    System.out.println("Successfully Connected to DB");
+                }
+                PreparedStatement stat = connection.prepareStatement(query);
+                stat.setInt(1, classID);
+                ResultSet rs = stat.executeQuery();
+                
+                if(rs.next() != false){
+                    String days = rs.getString(1);
+                    String classCode = rs.getString(2);
+                    int roomID = rs.getInt(3);
+                
+                
+                    // Check if room ID matches
+                    if(roomID == ROOM_ID){
+                        // Check if day matches
+                        if(days.contains(currentDay)){
+                            // Check for duplicate entry
+                            if(true){
+                                // No duplicate entry, insert new attendence record
+                                query = "INSERT INTO ATTENDENCERECORDS (RECORD_DATE, RECORD_STUDENTID, RECORD_CLASSID) "
+                                        + "VALUES (CURDATE(), ?, ?)";
+                                stat = connection.prepareStatement(query);
+                                stat.setInt(1, currentUser);
+                                stat.setInt(2, classID);
+                                stat.executeUpdate();
+                                label_Student_Status.setText("Your attendence has been recorded.");
+                                label_Student_ClassName.setText(classCode);
+                                fillTable(table_Student_Attendence, "SELECT * FROM ATTENDENCERECORDS WHERE RECORD_STUDENTID = ?", currentUser);
+                                return;
+                            }
+                        }
+                    }
+                    rs.close();
+                    stat.close();
+                    connection.close();
+                }
+            }
+            catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+        // No Current Classes
+        System.out.println("You have no current classes. Attendence won't be recorded.");
+        label_Student_Status.setText("No active classes.");
+    }
+    
+    private String getDay(){
+        String day = LocalDate.now().getDayOfWeek().name();
+        return "" + day.charAt(0);
+    }
+    
     private void button_Student_LogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Student_LogOutActionPerformed
         // Update currentUser global variable
         currentUser = -1;
@@ -643,15 +719,6 @@ public class MainFrame extends javax.swing.JFrame {
         
         System.out.println("Successfully logged out");
     }//GEN-LAST:event_button_Student_LogOutActionPerformed
-
-    private void panel_StudentFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_panel_StudentFocusGained
-        String date = "" + java.time.LocalDate.now();
-        label_Student_Date.setText(date);
-        
-        // Fetch student's class list
-        // Fetch details of each class in list
-        // Check for matching day and time
-    }//GEN-LAST:event_panel_StudentFocusGained
 
     /**
      * @param args the command line arguments
@@ -703,6 +770,49 @@ public class MainFrame extends javax.swing.JFrame {
             }
             Statement stat = connection.createStatement();
             ResultSet rs = stat.executeQuery(query);
+
+            //To remove previously added rows
+            while(table.getRowCount() > 0) 
+            {
+                ((DefaultTableModel) table.getModel()).removeRow(0);
+            }
+            int columns = rs.getMetaData().getColumnCount();
+            
+            while(rs.next()){  
+                Object[] row = new Object[columns];
+                for (int i = 1; i <= columns; i++)
+                {  
+                    row[i - 1] = rs.getObject(i);
+                }
+                ((DefaultTableModel) table.getModel()).insertRow(rs.getRow()-1,row);
+            }
+
+        rs.close();
+        stat.close();
+        connection.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Populates the given table with the results of the provided query
+     * @param table
+     * @param query
+     * @param ID student ID for which to fetch results
+     */
+    private static void fillTable(JTable table, String query, int ID){
+        try{
+            Connection connection = createConnection();
+            if(connection == null){
+                System.out.println("ERROR: Connection Failed");
+            } else {
+                System.out.println("Successfully Connected to DB");
+            }
+            PreparedStatement stat = connection.prepareStatement(query);
+            stat.setInt(1, ID);
+            ResultSet rs = stat.executeQuery();
 
             //To remove previously added rows
             while(table.getRowCount() > 0) 
