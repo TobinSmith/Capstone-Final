@@ -89,13 +89,16 @@ public class MainFrame extends javax.swing.JFrame {
         combo_Instructor_SelectStudent = new javax.swing.JComboBox<>();
         combo_Instructor_SelectDate = new javax.swing.JComboBox<>();
         button_Instructor_Save = new javax.swing.JButton();
+        button_Instructor_LogOut = new javax.swing.JButton();
         panel_Admin = new javax.swing.JPanel();
+        button_Instructor_LogOut2 = new javax.swing.JButton();
         panel_Test = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         panel_Test_StudentList = new javax.swing.JScrollPane();
         table_Test_StudentList = new javax.swing.JTable();
         button_Test_Refresh = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        button_Instructor_LogOut1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -350,7 +353,7 @@ public class MainFrame extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Course Name", "Course Days", "Student Name", "Date Absent"
+                "Record ID", "Date", "Class ID", "Student ID"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -391,6 +394,14 @@ public class MainFrame extends javax.swing.JFrame {
         button_Instructor_Save.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         button_Instructor_Save.setText("Save");
 
+        button_Instructor_LogOut.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        button_Instructor_LogOut.setText("Log Out");
+        button_Instructor_LogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_Instructor_LogOutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel_InstructorLayout = new javax.swing.GroupLayout(panel_Instructor);
         panel_Instructor.setLayout(panel_InstructorLayout);
         panel_InstructorLayout.setHorizontalGroup(
@@ -398,6 +409,11 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(panel_InstructorLayout.createSequentialGroup()
                 .addGap(57, 57, 57)
                 .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_InstructorLayout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel8)
+                        .addGap(132, 132, 132))
                     .addGroup(panel_InstructorLayout.createSequentialGroup()
                         .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel_InstructorLayout.createSequentialGroup()
@@ -407,7 +423,9 @@ public class MainFrame extends javax.swing.JFrame {
                                     .addComponent(combo_Instructor_SelectDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(panel_InstructorLayout.createSequentialGroup()
-                                .addComponent(button_Instructor_Save, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                                .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(button_Instructor_LogOut, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(button_Instructor_Save, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
                                 .addGap(108, 108, 108)))
                         .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -417,12 +435,7 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addComponent(combo_Instructor_FilterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(131, 131, 131)
                                 .addComponent(combo_Instructor_FilterStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
-                    .addGroup(panel_InstructorLayout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel8)
-                        .addGap(132, 132, 132))))
+                        .addContainerGap())))
         );
         panel_InstructorLayout.setVerticalGroup(
             panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -436,8 +449,12 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(combo_Instructor_FilterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(combo_Instructor_FilterStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panel_InstructorLayout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(button_Instructor_MarkIncorrect)
+                        .addGap(15, 15, 15))
                     .addGroup(panel_InstructorLayout.createSequentialGroup()
                         .addComponent(combo_Instructor_SelectCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -445,23 +462,37 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(combo_Instructor_SelectDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(button_Instructor_Save)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(button_Instructor_MarkIncorrect)
-                .addGap(15, 15, 15))
+                        .addComponent(button_Instructor_Save)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(button_Instructor_LogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(112, 112, 112))))
         );
 
         tabbedPane.addTab("Instructor", panel_Instructor);
+
+        button_Instructor_LogOut2.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        button_Instructor_LogOut2.setText("Log Out");
+        button_Instructor_LogOut2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_Instructor_LogOut2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_AdminLayout = new javax.swing.GroupLayout(panel_Admin);
         panel_Admin.setLayout(panel_AdminLayout);
         panel_AdminLayout.setHorizontalGroup(
             panel_AdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 877, Short.MAX_VALUE)
+            .addGroup(panel_AdminLayout.createSequentialGroup()
+                .addGap(79, 79, 79)
+                .addComponent(button_Instructor_LogOut2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(625, 625, 625))
         );
         panel_AdminLayout.setVerticalGroup(
             panel_AdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 550, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_AdminLayout.createSequentialGroup()
+                .addContainerGap(370, Short.MAX_VALUE)
+                .addComponent(button_Instructor_LogOut2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(145, 145, 145))
         );
 
         tabbedPane.addTab("Admin", panel_Admin);
@@ -491,6 +522,14 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel3.setText("Display list of students");
 
+        button_Instructor_LogOut1.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        button_Instructor_LogOut1.setText("Log Out");
+        button_Instructor_LogOut1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_Instructor_LogOut1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel_TestLayout = new javax.swing.GroupLayout(panel_Test);
         panel_Test.setLayout(panel_TestLayout);
         panel_TestLayout.setHorizontalGroup(
@@ -500,7 +539,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_TestLayout.createSequentialGroup()
-                .addContainerGap(335, Short.MAX_VALUE)
+                .addGap(76, 76, 76)
+                .addComponent(button_Instructor_LogOut1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(86, 86, 86)
                 .addGroup(panel_TestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_TestLayout.createSequentialGroup()
                         .addComponent(button_Test_Refresh)
@@ -519,8 +560,13 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(button_Test_Refresh)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panel_Test_StudentList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52))
+                .addGroup(panel_TestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_TestLayout.createSequentialGroup()
+                        .addComponent(panel_Test_StudentList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_TestLayout.createSequentialGroup()
+                        .addComponent(button_Instructor_LogOut1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(95, 95, 95))))
         );
 
         tabbedPane.addTab("Test", panel_Test);
@@ -594,6 +640,7 @@ public class MainFrame extends javax.swing.JFrame {
                     panel_StudentFocusGained();
                 } else if (userRole.equals("INSTRUCTOR")){
                     tabbedPane.setSelectedIndex(2);
+                    panel_InstructorFocusGained();
                 } else if (userRole.equals("ADMIN")){
                     tabbedPane.setSelectedIndex(4);
                 }
@@ -613,6 +660,11 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_button_Welcome_LoginActionPerformed
 
+    private void panel_InstructorFocusGained(){
+         fillTable(table_Instructor_Absence, "SELECT * FROM ABSENCERECORDS WHERE RECORD_CLASSID IN " +
+            "(SELECT CLASS_ID FROM CLASS WHERE CLASS_INSTRUCTORID = ?)", currentUser);
+    }
+    
     private void panel_StudentFocusGained(){
         String date = "" + java.time.LocalDate.now();
         label_Student_Date.setText(date);
@@ -707,10 +759,13 @@ public class MainFrame extends javax.swing.JFrame {
     
     private String getDay(){
         String day = LocalDate.now().getDayOfWeek().name();
+        if(day.toLowerCase().equals("thursday")){
+            return "u";
+        }
         return "" + day.charAt(0);
     }
     
-    private void button_Student_LogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Student_LogOutActionPerformed
+    private void logOut(){
         // Update currentUser global variable
         currentUser = -1;
         
@@ -718,7 +773,23 @@ public class MainFrame extends javax.swing.JFrame {
         tabbedPane.setSelectedIndex(0);
         
         System.out.println("Successfully logged out");
+    }
+    
+    private void button_Student_LogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Student_LogOutActionPerformed
+        logOut();
     }//GEN-LAST:event_button_Student_LogOutActionPerformed
+
+    private void button_Instructor_LogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Instructor_LogOutActionPerformed
+        logOut();
+    }//GEN-LAST:event_button_Instructor_LogOutActionPerformed
+
+    private void button_Instructor_LogOut1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Instructor_LogOut1ActionPerformed
+        logOut();
+    }//GEN-LAST:event_button_Instructor_LogOut1ActionPerformed
+
+    private void button_Instructor_LogOut2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Instructor_LogOut2ActionPerformed
+        logOut();
+    }//GEN-LAST:event_button_Instructor_LogOut2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -856,6 +927,9 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton button_Instructor_LogOut;
+    private javax.swing.JButton button_Instructor_LogOut1;
+    private javax.swing.JButton button_Instructor_LogOut2;
     private javax.swing.JButton button_Instructor_MarkIncorrect;
     private javax.swing.JButton button_Instructor_Save;
     private javax.swing.JButton button_Student_Dispute;
