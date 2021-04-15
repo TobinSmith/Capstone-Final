@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -70,7 +71,6 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         table_Student_Absence = new javax.swing.JTable();
-        button_Student_Dispute = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         label_Student_Status = new javax.swing.JLabel();
         label_Student_StudentName = new javax.swing.JLabel();
@@ -81,7 +81,7 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         table_Instructor_Absence = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
-        button_Instructor_MarkIncorrect = new javax.swing.JButton();
+        button_Instructor_Remove = new javax.swing.JButton();
         combo_Instructor_FilterCourse = new javax.swing.JComboBox<>();
         combo_Instructor_FilterStudent = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
@@ -214,9 +214,6 @@ public class MainFrame extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(table_Student_Absence);
 
-        button_Student_Dispute.setForeground(new java.awt.Color(255, 51, 51));
-        button_Student_Dispute.setText("Dispute");
-
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         label_Student_Status.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
@@ -252,7 +249,7 @@ public class MainFrame extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(83, 83, 83)
                                 .addComponent(button_Student_LogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 15, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(label_Student_StudentName)
@@ -283,24 +280,19 @@ public class MainFrame extends javax.swing.JFrame {
         panel_StudentLayout.setHorizontalGroup(
             panel_StudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_StudentLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(panel_StudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel_StudentLayout.createSequentialGroup()
-                        .addGap(798, 798, 798)
-                        .addComponent(button_Student_Dispute))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
-                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(panel_StudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(panel_StudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addGap(206, 206, 206))
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addComponent(jLabel7)
+                                .addGap(206, 206, 206))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_StudentLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -320,9 +312,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(button_Student_Dispute)
-                .addContainerGap())
+                .addGap(40, 40, 40))
         );
 
         tabbedPane.addTab("Student", panel_Student);
@@ -375,8 +365,13 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         jLabel8.setText("Absence Records For Your Classes");
 
-        button_Instructor_MarkIncorrect.setForeground(new java.awt.Color(255, 51, 51));
-        button_Instructor_MarkIncorrect.setText("Mark as incorrect");
+        button_Instructor_Remove.setForeground(new java.awt.Color(255, 51, 51));
+        button_Instructor_Remove.setText("Remove Record");
+        button_Instructor_Remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_Instructor_RemoveActionPerformed(evt);
+            }
+        });
 
         combo_Instructor_FilterCourse.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter by Course Name" }));
 
@@ -430,7 +425,7 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(button_Instructor_MarkIncorrect, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addComponent(button_Instructor_Remove, javax.swing.GroupLayout.Alignment.TRAILING))
                             .addGroup(panel_InstructorLayout.createSequentialGroup()
                                 .addComponent(combo_Instructor_FilterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(131, 131, 131)
@@ -453,7 +448,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(panel_InstructorLayout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_Instructor_MarkIncorrect)
+                        .addComponent(button_Instructor_Remove)
                         .addGap(15, 15, 15))
                     .addGroup(panel_InstructorLayout.createSequentialGroup()
                         .addComponent(combo_Instructor_SelectCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -791,6 +786,36 @@ public class MainFrame extends javax.swing.JFrame {
         logOut();
     }//GEN-LAST:event_button_Instructor_LogOut2ActionPerformed
 
+    private void button_Instructor_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Instructor_RemoveActionPerformed
+        int row = table_Instructor_Absence.getSelectedRow();
+        int recordID = Integer.parseInt(table_Instructor_Absence.getModel().getValueAt(row, 0).toString());
+        int input = JOptionPane.showConfirmDialog(null, "Remove this record?");
+        if(input != 0){
+            System.out.println("Cancelled. Not removing a record.");
+            return;
+        }
+        
+        String query = "DELETE FROM ABSENCERECORDS WHERE RECORD_ID = ?";
+        try{
+            Connection connection = createConnection();
+            if(connection == null){
+                System.out.println("ERROR: Connection Failed");
+            } else {
+                System.out.println("Successfully Connected to DB");
+            }
+            PreparedStatement stat = connection.prepareStatement(query);
+            stat.setInt(1, recordID);
+            stat.executeUpdate();
+            System.out.println("Absence record of ID " + recordID + " removed.");
+            fillTable(table_Instructor_Absence, "SELECT * FROM ABSENCERECORDS WHERE RECORD_CLASSID IN " +
+            "(SELECT CLASS_ID FROM CLASS WHERE CLASS_INSTRUCTORID = ?)", currentUser);
+            stat.close();
+            connection.close();
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_button_Instructor_RemoveActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -930,9 +955,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton button_Instructor_LogOut;
     private javax.swing.JButton button_Instructor_LogOut1;
     private javax.swing.JButton button_Instructor_LogOut2;
-    private javax.swing.JButton button_Instructor_MarkIncorrect;
+    private javax.swing.JButton button_Instructor_Remove;
     private javax.swing.JButton button_Instructor_Save;
-    private javax.swing.JButton button_Student_Dispute;
     private javax.swing.JButton button_Student_LogOut;
     private javax.swing.JButton button_Test_Refresh;
     private javax.swing.JButton button_Welcome_Login;
