@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -45,6 +46,7 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         jLabel4.setVisible(false);
         tabbedPane.setEnabled(false);
+        label_Instructor_Error.setVisible(false);
     }
 
     /**
@@ -87,9 +89,11 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         combo_Instructor_SelectCourse = new javax.swing.JComboBox<>();
         combo_Instructor_SelectStudent = new javax.swing.JComboBox<>();
-        combo_Instructor_SelectDate = new javax.swing.JComboBox<>();
         button_Instructor_Save = new javax.swing.JButton();
         button_Instructor_LogOut = new javax.swing.JButton();
+        text_Instructor_Date = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        label_Instructor_Error = new javax.swing.JLabel();
         panel_Admin = new javax.swing.JPanel();
         button_Instructor_LogOut2 = new javax.swing.JButton();
         panel_Test = new javax.swing.JPanel();
@@ -384,10 +388,13 @@ public class MainFrame extends javax.swing.JFrame {
 
         combo_Instructor_SelectStudent.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select a Student" }));
 
-        combo_Instructor_SelectDate.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select a Date" }));
-
         button_Instructor_Save.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         button_Instructor_Save.setText("Save");
+        button_Instructor_Save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_Instructor_SaveActionPerformed(evt);
+            }
+        });
 
         button_Instructor_LogOut.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         button_Instructor_LogOut.setText("Log Out");
@@ -396,6 +403,14 @@ public class MainFrame extends javax.swing.JFrame {
                 button_Instructor_LogOutActionPerformed(evt);
             }
         });
+
+        text_Instructor_Date.setText("2021-12-30");
+
+        jLabel1.setText("Enter Date");
+
+        label_Instructor_Error.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        label_Instructor_Error.setForeground(new java.awt.Color(255, 51, 51));
+        label_Instructor_Error.setText("Invalid Data");
 
         javax.swing.GroupLayout panel_InstructorLayout = new javax.swing.GroupLayout(panel_Instructor);
         panel_Instructor.setLayout(panel_InstructorLayout);
@@ -412,16 +427,23 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(panel_InstructorLayout.createSequentialGroup()
                         .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel_InstructorLayout.createSequentialGroup()
-                                .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(combo_Instructor_SelectCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(combo_Instructor_SelectStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(combo_Instructor_SelectDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(panel_InstructorLayout.createSequentialGroup()
                                 .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(button_Instructor_LogOut, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(button_Instructor_Save, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
-                                .addGap(108, 108, 108)))
+                                .addGap(108, 108, 108))
+                            .addGroup(panel_InstructorLayout.createSequentialGroup()
+                                .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(combo_Instructor_SelectCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(combo_Instructor_SelectStudent, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(text_Instructor_Date)
+                                        .addGroup(panel_InstructorLayout.createSequentialGroup()
+                                            .addGap(24, 24, 24)
+                                            .addComponent(jLabel1)))
+                                    .addGroup(panel_InstructorLayout.createSequentialGroup()
+                                        .addGap(45, 45, 45)
+                                        .addComponent(label_Instructor_Error)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -454,10 +476,14 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(combo_Instructor_SelectCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(combo_Instructor_SelectStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(combo_Instructor_SelectDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(text_Instructor_Date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(button_Instructor_Save)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(label_Instructor_Error)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(button_Instructor_LogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(112, 112, 112))))
@@ -656,8 +682,64 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_button_Welcome_LoginActionPerformed
 
     private void panel_InstructorFocusGained(){
-         fillTable(table_Instructor_Absence, "SELECT * FROM ABSENCERECORDS WHERE RECORD_CLASSID IN " +
+        fillTable(table_Instructor_Absence, "SELECT * FROM ABSENCERECORDS WHERE RECORD_CLASSID IN " +
             "(SELECT CLASS_ID FROM CLASS WHERE CLASS_INSTRUCTORID = ?)", currentUser);
+        
+        // Get course list
+        String query = "SELECT CLASS_ID, CLASS_CODE FROM CLASS WHERE CLASS_INSTRUCTORID = ?";
+        try{
+            Connection connection = createConnection();
+            if(connection == null){
+                System.out.println("ERROR: Connection Failed");
+            } else {
+                System.out.println("Successfully Connected to DB");
+            }
+            PreparedStatement stat = connection.prepareStatement(query);
+            stat.setInt(1, currentUser);
+            ResultSet rs = stat.executeQuery();
+            
+            DefaultComboBoxModel model = (DefaultComboBoxModel) combo_Instructor_SelectCourse.getModel();
+            while(rs.next()){
+                String temp = "";
+                temp += rs.getInt(1) + ", ";
+                temp += rs.getString(2);
+                model.addElement(temp);
+            }
+
+        rs.close();
+        stat.close();
+        connection.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        
+        // Get student list
+        query = "SELECT DISTINCT ENROLLMENT_STUDENTID FROM ENROLLMENT WHERE ENROLLMENT_CLASSID IN "
+                + "(SELECT CLASS_ID FROM CLASS WHERE CLASS_INSTRUCTORID = ?)";
+        try{
+            Connection connection = createConnection();
+            if(connection == null){
+                System.out.println("ERROR: Connection Failed");
+            } else {
+                System.out.println("Successfully Connected to DB");
+            }
+            PreparedStatement stat = connection.prepareStatement(query);
+            stat.setInt(1, currentUser);
+            ResultSet rs = stat.executeQuery();
+            
+            DefaultComboBoxModel model = (DefaultComboBoxModel) combo_Instructor_SelectStudent.getModel();
+            while(rs.next()){
+                model.addElement(rs.getInt(1));
+            }
+
+        rs.close();
+        stat.close();
+        connection.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
     }
     
     private void panel_StudentFocusGained(){
@@ -816,6 +898,68 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_button_Instructor_RemoveActionPerformed
 
+    private void button_Instructor_SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Instructor_SaveActionPerformed
+        String selectedCourse = combo_Instructor_SelectCourse.getSelectedItem().toString();
+        String selectedStudent = combo_Instructor_SelectStudent.getSelectedItem().toString();
+        String date = text_Instructor_Date.getText();
+        
+        // Verify Course
+        if(selectedCourse.equals("Select a Course")){
+            label_Instructor_Error.setVisible(true);
+            return;
+        }
+        
+        // Verify Student
+        if(selectedStudent.equals("Select a Student")){
+            label_Instructor_Error.setVisible(true);
+            return;
+        }
+        
+        // Verify Date
+        if(!date.matches("\\d{4}-\\d{2}-\\d{2}")){
+            label_Instructor_Error.setVisible(true);
+            return;
+        }
+        
+        label_Instructor_Error.setVisible(false);
+        
+        // Parse ClassID and selectedStudent
+        String ID = "";
+        for(int i = 0; i < selectedCourse.length(); i++){
+            if(selectedCourse.charAt(i) == ','){
+                break;
+            }
+            ID += selectedCourse.charAt(i);
+        }
+        int classID = Integer.parseInt(ID);
+        int student = Integer.parseInt(selectedStudent);
+        
+        // Insert absence
+        String query = "INSERT INTO ABSENCERECORDS (RECORD_DATE, RECORD_CLASSID, RECORD_STUDENTID) "
+                + "VALUES (?, ?, ?)";
+        try{
+            Connection connection = createConnection();
+            if(connection == null){
+                System.out.println("ERROR: Connection Failed");
+            } else {
+                System.out.println("Successfully Connected to DB");
+            }
+            PreparedStatement stat = connection.prepareStatement(query);
+            stat.setString(1, date);
+            stat.setInt(2, classID);
+            stat.setInt(3, student);
+            stat.executeUpdate();
+            
+            stat.close();
+            connection.close();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        fillTable(table_Instructor_Absence, "SELECT * FROM ABSENCERECORDS WHERE RECORD_CLASSID IN " +
+            "(SELECT CLASS_ID FROM CLASS WHERE CLASS_INSTRUCTORID = ?)", currentUser);
+    }//GEN-LAST:event_button_Instructor_SaveActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -963,8 +1107,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> combo_Instructor_FilterCourse;
     private javax.swing.JComboBox<String> combo_Instructor_FilterStudent;
     private javax.swing.JComboBox<String> combo_Instructor_SelectCourse;
-    private javax.swing.JComboBox<String> combo_Instructor_SelectDate;
     private javax.swing.JComboBox<String> combo_Instructor_SelectStudent;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -976,6 +1120,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel label_Instructor_Error;
     private javax.swing.JLabel label_Student_ClassName;
     private javax.swing.JLabel label_Student_Date;
     private javax.swing.JLabel label_Student_Status;
@@ -995,5 +1140,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTable table_Test_StudentList;
     private javax.swing.JTextField textField_Welcome_Email;
     private javax.swing.JTextField textField_Welcome_Password;
+    private javax.swing.JTextField text_Instructor_Date;
     // End of variables declaration//GEN-END:variables
 }
