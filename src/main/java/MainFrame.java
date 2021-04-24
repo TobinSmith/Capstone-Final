@@ -5,6 +5,12 @@
  */
 
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -34,7 +40,7 @@ import javax.swing.table.DefaultTableModel;
 public class MainFrame extends javax.swing.JFrame {
 
     // ID of the room where this local machine is running
-    public static final int ROOM_ID = 2;
+    public int ROOM_ID = 2;
     
     // USER_ID of currently logged-in user
     public int currentUser = -1;
@@ -44,9 +50,27 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
+        getRoomID();
         jLabel4.setVisible(false);
+        label_Admin_Error.setVisible(false);
         tabbedPane.setEnabled(false);
         label_Instructor_Error.setVisible(false);
+    }
+    
+    private void getRoomID(){
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("src/room.txt"));
+            String line = br.readLine();
+            int roomID = Integer.parseInt(line);
+            ROOM_ID = roomID;
+            System.out.println("Room ID set to " + roomID);
+        } catch (FileNotFoundException ex) {
+            System.out.println("No room file found. Sticking with default of room 2.");
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NumberFormatException ex){
+            System.out.println("Invalid room file. Sticking with default of room 2.");
+        }
     }
 
     /**
@@ -84,8 +108,6 @@ public class MainFrame extends javax.swing.JFrame {
         table_Instructor_Absence = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         button_Instructor_Remove = new javax.swing.JButton();
-        combo_Instructor_FilterCourse = new javax.swing.JComboBox<>();
-        combo_Instructor_FilterStudent = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         combo_Instructor_SelectCourse = new javax.swing.JComboBox<>();
         combo_Instructor_SelectStudent = new javax.swing.JComboBox<>();
@@ -96,6 +118,10 @@ public class MainFrame extends javax.swing.JFrame {
         label_Instructor_Error = new javax.swing.JLabel();
         panel_Admin = new javax.swing.JPanel();
         button_Instructor_LogOut2 = new javax.swing.JButton();
+        label_Admin_RoomID = new javax.swing.JLabel();
+        text_Admin_RoomID = new javax.swing.JTextField();
+        button_Admin_Update = new javax.swing.JButton();
+        label_Admin_Error = new javax.swing.JLabel();
         panel_Test = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         panel_Test_StudentList = new javax.swing.JScrollPane();
@@ -377,10 +403,6 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        combo_Instructor_FilterCourse.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter by Course Name" }));
-
-        combo_Instructor_FilterStudent.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Filter by Student Name" }));
-
         jLabel9.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         jLabel9.setText("Record New Absence");
 
@@ -445,13 +467,8 @@ public class MainFrame extends javax.swing.JFrame {
                                         .addComponent(label_Instructor_Error)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(button_Instructor_Remove, javax.swing.GroupLayout.Alignment.TRAILING))
-                            .addGroup(panel_InstructorLayout.createSequentialGroup()
-                                .addComponent(combo_Instructor_FilterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(131, 131, 131)
-                                .addComponent(combo_Instructor_FilterStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(button_Instructor_Remove, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addContainerGap())))
         );
         panel_InstructorLayout.setVerticalGroup(
@@ -461,11 +478,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9))
-                .addGap(18, 18, 18)
-                .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(combo_Instructor_FilterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(combo_Instructor_FilterStudent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(44, 44, 44)
                 .addGroup(panel_InstructorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panel_InstructorLayout.createSequentialGroup()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -499,19 +512,53 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        label_Admin_RoomID.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        label_Admin_RoomID.setText("Current Room ID: 2");
+
+        button_Admin_Update.setText("Update Room ID");
+        button_Admin_Update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_Admin_UpdateActionPerformed(evt);
+            }
+        });
+
+        label_Admin_Error.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        label_Admin_Error.setForeground(new java.awt.Color(255, 51, 51));
+        label_Admin_Error.setText("Enter a valid ID");
+
         javax.swing.GroupLayout panel_AdminLayout = new javax.swing.GroupLayout(panel_Admin);
         panel_Admin.setLayout(panel_AdminLayout);
         panel_AdminLayout.setHorizontalGroup(
             panel_AdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_AdminLayout.createSequentialGroup()
-                .addGap(79, 79, 79)
-                .addComponent(button_Instructor_LogOut2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_AdminLayout.createSequentialGroup()
+                .addGroup(panel_AdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panel_AdminLayout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(button_Instructor_LogOut2, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
+                    .addGroup(panel_AdminLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panel_AdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(label_Admin_Error)
+                            .addGroup(panel_AdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(label_Admin_RoomID, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(panel_AdminLayout.createSequentialGroup()
+                                    .addComponent(text_Admin_RoomID, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(button_Admin_Update, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addGap(625, 625, 625))
         );
         panel_AdminLayout.setVerticalGroup(
             panel_AdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_AdminLayout.createSequentialGroup()
-                .addContainerGap(370, Short.MAX_VALUE)
+                .addGap(132, 132, 132)
+                .addComponent(label_Admin_RoomID)
+                .addGap(18, 18, 18)
+                .addGroup(panel_AdminLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(text_Admin_RoomID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button_Admin_Update))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(label_Admin_Error)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
                 .addComponent(button_Instructor_LogOut2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(145, 145, 145))
         );
@@ -663,7 +710,8 @@ public class MainFrame extends javax.swing.JFrame {
                     tabbedPane.setSelectedIndex(2);
                     panel_InstructorFocusGained();
                 } else if (userRole.equals("ADMIN")){
-                    tabbedPane.setSelectedIndex(4);
+                    tabbedPane.setSelectedIndex(3);
+                    panel_AdminFocusGained();
                 }
                 
                 
@@ -681,6 +729,10 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_button_Welcome_LoginActionPerformed
 
+    private void panel_AdminFocusGained(){
+        label_Admin_RoomID.setText("Current Room ID: " + ROOM_ID);
+    }
+    
     private void panel_InstructorFocusGained(){
         fillTable(table_Instructor_Absence, "SELECT * FROM ABSENCERECORDS WHERE RECORD_CLASSID IN " +
             "(SELECT CLASS_ID FROM CLASS WHERE CLASS_INSTRUCTORID = ?)", currentUser);
@@ -960,6 +1012,41 @@ public class MainFrame extends javax.swing.JFrame {
             "(SELECT CLASS_ID FROM CLASS WHERE CLASS_INSTRUCTORID = ?)", currentUser);
     }//GEN-LAST:event_button_Instructor_SaveActionPerformed
 
+    private void button_Admin_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_Admin_UpdateActionPerformed
+        String input = text_Admin_RoomID.getText();
+        if(isNumeric(input) && input.length() < 5){
+            label_Admin_Error.setVisible(false);
+            ROOM_ID = Integer.parseInt(input);
+            label_Admin_RoomID.setText("Current Room ID: " + ROOM_ID);
+            changeID();
+        } else {
+            label_Admin_Error.setVisible(true);
+            text_Admin_RoomID.setText("");
+        }
+    }//GEN-LAST:event_button_Admin_UpdateActionPerformed
+
+    private void changeID(){
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("src/room.txt", false));
+            bw.write("" + ROOM_ID);
+            bw.close();
+            System.out.println("Room ID " + ROOM_ID + " has been saved to src/room.txt");
+        } catch (IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private boolean isNumeric(String input){
+        if (input == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(input);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
     /**
      * @param args the command line arguments
      */
@@ -1096,6 +1183,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton button_Admin_Update;
     private javax.swing.JButton button_Instructor_LogOut;
     private javax.swing.JButton button_Instructor_LogOut1;
     private javax.swing.JButton button_Instructor_LogOut2;
@@ -1104,8 +1192,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton button_Student_LogOut;
     private javax.swing.JButton button_Test_Refresh;
     private javax.swing.JButton button_Welcome_Login;
-    private javax.swing.JComboBox<String> combo_Instructor_FilterCourse;
-    private javax.swing.JComboBox<String> combo_Instructor_FilterStudent;
     private javax.swing.JComboBox<String> combo_Instructor_SelectCourse;
     private javax.swing.JComboBox<String> combo_Instructor_SelectStudent;
     private javax.swing.JLabel jLabel1;
@@ -1120,6 +1206,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel label_Admin_Error;
+    private javax.swing.JLabel label_Admin_RoomID;
     private javax.swing.JLabel label_Instructor_Error;
     private javax.swing.JLabel label_Student_ClassName;
     private javax.swing.JLabel label_Student_Date;
@@ -1140,6 +1228,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTable table_Test_StudentList;
     private javax.swing.JTextField textField_Welcome_Email;
     private javax.swing.JTextField textField_Welcome_Password;
+    private javax.swing.JTextField text_Admin_RoomID;
     private javax.swing.JTextField text_Instructor_Date;
     // End of variables declaration//GEN-END:variables
 }
